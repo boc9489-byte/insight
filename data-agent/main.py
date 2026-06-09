@@ -7,7 +7,7 @@ from app.core.context import request_id_ctx_var
 from app.core.lifespan import lifespan
 
 # 创建FastAPI应用，并注册生命周期函数
-app = FastAPI(lifespan=lifespan) 
+app = FastAPI(lifespan=lifespan)
 
 # 注册路由
 app.include_router(query_router)
@@ -24,7 +24,7 @@ async def add_process_time_header(request: Request, call_next):
     return response
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=8000)

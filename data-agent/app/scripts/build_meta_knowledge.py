@@ -35,7 +35,9 @@ async def build(config_path: Path):
         column_qdrant_repository = ColumnQdrantRepository(
             qdrant_client_manager.get_client()
         )  # 创建列QdrantRepo实例
-        embedding_client = embedding_client_manager.get_client()  # 获取Embedding客户端实例
+        embedding_client = (
+            embedding_client_manager.get_client()
+        )  # 获取Embedding客户端实例
         value_es_repository = ValueESRepository(
             es_client_manager.get_client()
         )  # 创建值ElasticsearchRepo实例

@@ -8,14 +8,11 @@ from app.conf.app_config import EmbeddingConfig, app_config
 
 
 class EmbeddingClient(Protocol):
-    async def aembed_documents(self, texts: list[str]) -> list[list[float]]:
-        ...
+    async def aembed_documents(self, texts: list[str]) -> list[list[float]]: ...
 
-    async def aembed_query(self, text: str) -> list[float]:
-        ...
+    async def aembed_query(self, text: str) -> list[float]: ...
 
-    async def aclose(self) -> None:
-        ...
+    async def aclose(self) -> None: ...
 
 
 class RemoteEmbeddingClient:
@@ -60,7 +57,9 @@ class RemoteEmbeddingClient:
         await self._client.aclose()
 
     @staticmethod
-    def _parse_embeddings(payload: dict[str, Any], expected_count: int) -> list[list[float]]:
+    def _parse_embeddings(
+        payload: dict[str, Any], expected_count: int
+    ) -> list[list[float]]:
         data = payload.get("data")
         if not isinstance(data, list):
             raise ValueError("Embedding response missing data list")

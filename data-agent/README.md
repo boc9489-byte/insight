@@ -5,11 +5,14 @@
 
 ## 在数据库中建表并导入数据
 - 元数据表 [app/scripts/meta.sql](app/scripts/meta.sql)
+  ```bash
+  uv run -m app.scripts.init_db  # 初始化元数据库
+  ```
 - 业务数据: dbmock
 
 ## 修改配置信息
 - 编辑 [conf/app_config.yaml](conf/app_config.yaml)，配置数据库和模型信息
-- 编辑 `conf/.env`，配置模型服务密钥
+- 编辑 [`conf/.env`](conf/.env)，配置模型服务密钥
 - 编辑 [conf/meta_config.yaml](conf/meta_config.yaml)，配置表信息
 
 ## 启动

@@ -21,7 +21,10 @@ async def recall_value(state: DataAgentState, runtime: Runtime[DataAgentContext]
 
     try:
         # 使用LLM扩展关键词
-        prompt = PromptTemplate(template=load_prompt("extend_keywords_for_value_recall"), input_variables=["query"])
+        prompt = PromptTemplate(
+            template=load_prompt("extend_keywords_for_value_recall"),
+            input_variables=["query"],
+        )
         output_parser = JsonOutputParser()
 
         chain = prompt | llm | output_parser
@@ -44,7 +47,7 @@ async def recall_value(state: DataAgentState, runtime: Runtime[DataAgentContext]
         writer({"type": "progress", "step": "召回字段取值", "status": "success"})
         logger.info(f"召回字段取值：{list(values_map.keys())}")
 
-        return {'retrieved_values': retrieved_values}
+        return {"retrieved_values": retrieved_values}
     except Exception as e:
         writer({"type": "progress", "step": "召回字段取值", "status": "error"})
         logger.error(f"召回字段取值失败: {str(e)}")

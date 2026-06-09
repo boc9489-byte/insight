@@ -22,13 +22,12 @@ class MysqlClientManager:
         return f"mysql+asyncmy://{self.db_config.user}:{self.db_config.password}@{self.db_config.host}:{self.db_config.port}/{self.db_config.database}?charset=utf8mb4"
 
     def init(self):
-        self.engine = create_async_engine(url=self._get_url(),
-                                          pool_size=10,
-                                          pool_pre_ping=True)
-        self.session_factory = async_sessionmaker(self.engine,
-                                                  autoflush=True,
-                                                  expire_on_commit=False,
-                                                  autobegin=True)
+        self.engine = create_async_engine(
+            url=self._get_url(), pool_size=10, pool_pre_ping=True
+        )
+        self.session_factory = async_sessionmaker(
+            self.engine, autoflush=True, expire_on_commit=False, autobegin=True
+        )
 
     def get_session_factory(self) -> async_sessionmaker[AsyncSession]:
         if self.session_factory is None:
@@ -45,15 +44,13 @@ class MysqlClientManager:
 dw_mysql_client_manager = MysqlClientManager(app_config.db_dw)
 meta_mysql_client_manager = MysqlClientManager(app_config.db_meta)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     meta_mysql_client_manager.init()
-
 
     async def test():
         async with meta_mysql_client_manager.get_session_factory()() as session:
             result = await session.execute(text("select * from table_info limit 10"))
             rows = result.fetchall()
             print(rows)
-
 
     asyncio.run(test())

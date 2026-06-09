@@ -38,6 +38,7 @@ class MetaKnowledgeService:
         """将示例值中的日期时间和 Decimal 对象转换为可 JSON 序列化的类型"""
         from datetime import date, datetime
         from decimal import Decimal
+
         serialized = []
         for value in examples:
             if isinstance(value, datetime):
@@ -50,7 +51,9 @@ class MetaKnowledgeService:
                 serialized.append(value)
         return serialized
 
-    async def _save_tables_to_meta_db(self, meta_config: MetaConfig)-> list[ColumnInfo]:
+    async def _save_tables_to_meta_db(
+        self, meta_config: MetaConfig
+    ) -> list[ColumnInfo]:
         table_infos: list[TableInfo] = []
         column_infos: list[ColumnInfo] = []
 
@@ -65,10 +68,14 @@ class MetaKnowledgeService:
             table_infos.append(table_info)
 
             # 查询该表的所有字段类型
-            column_types: dict[str, str] = await self.dw_mysql_repository.get_column_types(table.name)
+            column_types: dict[
+                str, str
+            ] = await self.dw_mysql_repository.get_column_types(table.name)
             for column in table.columns:
                 # 查询该字段的部分取值作为示例
-                column_values: list = await self.dw_mysql_repository.get_column_values(table.name, column.name, 10)
+                column_values: list = await self.dw_mysql_repository.get_column_values(
+                    table.name, column.name, 10
+                )
                 # 将日期时间对象转换为字符串
                 column_values = self._serialize_examples(column_values)
                 # 构造ColumnInfo实例
@@ -140,7 +147,7 @@ class MetaKnowledgeService:
     ):
         # 取保index存在
         await self.value_es_repository.ensure_index()
-        
+
         # 获取需要同步取值的列
         column2sync: dict[str, bool] = {}
         for table in meta_config.tables or []:
@@ -200,7 +207,7 @@ class MetaKnowledgeService:
     async def _save_metric_info_to_qdrant(self, metric_infos: list[MetricInfo]):
         # 确保collection存在
         await self.metric_qdrant_repository.ensure_collection()
-        
+
         # 构造待保存的数据
         points: list[dict] = []
         for metric_info in metric_infos:

@@ -11,7 +11,5 @@ class MetricInfoMySQL(Base):
     id: Mapped[str] = mapped_column(String(128), primary_key=True, comment="指标编码")
     name: Mapped[str] = mapped_column(String(128), comment="指标名称")
     description: Mapped[str] = mapped_column(Text, comment="指标描述")
-    relevant_columns: Mapped[list[str]] = mapped_column(
-        JSON, comment="关联字段"
-    )
+    relevant_columns: Mapped[list[str]] = mapped_column(JSON, comment="关联字段")
     alias: Mapped[list[str]] = mapped_column(JSON, comment="指标别名")

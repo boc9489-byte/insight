@@ -76,8 +76,8 @@ class AppConfig:
     llm: LLMConfig
 
 
-config_file = Path(__file__).parents[2] / 'conf' / 'app_config.yaml'
+config_file = Path(__file__).parents[2] / "conf" / "app_config.yaml"
 app_config = load_config(config_file, AppConfig)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(app_config.es.host)

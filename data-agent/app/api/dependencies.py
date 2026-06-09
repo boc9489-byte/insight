@@ -1,9 +1,15 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.clients.embedding_client_manager import EmbeddingClient, embedding_client_manager
+from app.clients.embedding_client_manager import (
+    EmbeddingClient,
+    embedding_client_manager,
+)
 from app.clients.es_client_manager import es_client_manager
-from app.clients.mysql_client_manager import meta_mysql_client_manager, dw_mysql_client_manager
+from app.clients.mysql_client_manager import (
+    meta_mysql_client_manager,
+    dw_mysql_client_manager,
+)
 from app.clients.qdrant_client_manager import qdrant_client_manager
 from app.repositories.es.value_es_repository import ValueESRepository
 from app.repositories.mysql.dw.dw_mysql_repository import DWMySQLRepository
@@ -48,12 +54,16 @@ async def get_dw_mysql_repository(session: AsyncSession = Depends(get_dw_session
 
 
 async def get_query_service(
-        embedding_client: EmbeddingClient = Depends(get_embedding_client),
-        column_qdrant_repository: ColumnQdrantRepository = Depends(get_column_qdrant_repository),
-        value_es_repository: ValueESRepository = Depends(get_value_es_repository),
-        metric_qdrant_repository: MetricQdrantRepository = Depends(get_metric_qdrant_repository),
-        meta_mysql_repository: MetaMySQLRepository = Depends(get_meta_mysql_repository),
-        dw_mysql_repository: DWMySQLRepository = Depends(get_dw_mysql_repository)
+    embedding_client: EmbeddingClient = Depends(get_embedding_client),
+    column_qdrant_repository: ColumnQdrantRepository = Depends(
+        get_column_qdrant_repository
+    ),
+    value_es_repository: ValueESRepository = Depends(get_value_es_repository),
+    metric_qdrant_repository: MetricQdrantRepository = Depends(
+        get_metric_qdrant_repository
+    ),
+    meta_mysql_repository: MetaMySQLRepository = Depends(get_meta_mysql_repository),
+    dw_mysql_repository: DWMySQLRepository = Depends(get_dw_mysql_repository),
 ) -> QueryService:
     return QueryService(
         embedding_client=embedding_client,
@@ -61,5 +71,5 @@ async def get_query_service(
         value_es_repository=value_es_repository,
         metric_qdrant_repository=metric_qdrant_repository,
         meta_mysql_repository=meta_mysql_repository,
-        dw_mysql_repository=dw_mysql_repository
+        dw_mysql_repository=dw_mysql_repository,
     )

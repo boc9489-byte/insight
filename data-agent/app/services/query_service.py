@@ -13,13 +13,15 @@ from app.repositories.qdrant.metric_qdrant_repository import MetricQdrantReposit
 
 
 class QueryService:
-    def __init__(self,
-                 embedding_client: EmbeddingClient,
-                 column_qdrant_repository: ColumnQdrantRepository,
-                 value_es_repository: ValueESRepository,
-                 metric_qdrant_repository: MetricQdrantRepository,
-                 meta_mysql_repository: MetaMySQLRepository,
-                 dw_mysql_repository: DWMySQLRepository):
+    def __init__(
+        self,
+        embedding_client: EmbeddingClient,
+        column_qdrant_repository: ColumnQdrantRepository,
+        value_es_repository: ValueESRepository,
+        metric_qdrant_repository: MetricQdrantRepository,
+        meta_mysql_repository: MetaMySQLRepository,
+        dw_mysql_repository: DWMySQLRepository,
+    ):
         self.embedding_client = embedding_client
         self.column_qdrant_repository = column_qdrant_repository
         self.value_es_repository = value_es_repository
@@ -34,11 +36,13 @@ class QueryService:
             value_es_repository=self.value_es_repository,
             metric_qdrant_repository=self.metric_qdrant_repository,
             meta_mysql_repository=self.meta_mysql_repository,
-            dw_mysql_repository=self.dw_mysql_repository
+            dw_mysql_repository=self.dw_mysql_repository,
         )
         state = cast(DataAgentState, {"query": query})
         try:
-            async for chunk in graph.astream(input=state, context=context, stream_mode="custom"):
-                yield f"data: {json.dumps(chunk, ensure_ascii=False, default=str)}\n\n" # SSE格式发送数据
+            async for chunk in graph.astream(
+                input=state, context=context, stream_mode="custom"
+            ):
+                yield f"data: {json.dumps(chunk, ensure_ascii=False, default=str)}\n\n"  # SSE格式发送数据
         except Exception as e:
             yield f"data: {json.dumps({'type': 'error', 'message': str(e)}, ensure_ascii=False, default=str)}\n\n"

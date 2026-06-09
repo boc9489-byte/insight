@@ -20,7 +20,10 @@ from app.agent.nodes.validate_sql import validate_sql
 from app.agent.state import DataAgentState
 from app.clients.embedding_client_manager import embedding_client_manager
 from app.clients.es_client_manager import es_client_manager
-from app.clients.mysql_client_manager import meta_mysql_client_manager, dw_mysql_client_manager
+from app.clients.mysql_client_manager import (
+    meta_mysql_client_manager,
+    dw_mysql_client_manager,
+)
 from app.clients.qdrant_client_manager import qdrant_client_manager
 from app.repositories.es.value_es_repository import ValueESRepository
 from app.repositories.mysql.dw.dw_mysql_repository import DWMySQLRepository
@@ -59,9 +62,11 @@ graph_builder.add_edge("filter_metric", "add_extra_context")
 graph_builder.add_edge("add_extra_context", "generate_sql")
 graph_builder.add_edge("generate_sql", "validate_sql")
 
-graph_builder.add_conditional_edges("validate_sql",
-                                    lambda state: "execute_sql" if state["error"] is None else "correct_sql",
-                                    {"execute_sql": "execute_sql", "correct_sql": "correct_sql"})
+graph_builder.add_conditional_edges(
+    "validate_sql",
+    lambda state: "execute_sql" if state["error"] is None else "correct_sql",
+    {"execute_sql": "execute_sql", "correct_sql": "correct_sql"},
+)
 
 graph_builder.add_edge("correct_sql", "execute_sql")
 graph_builder.add_edge("execute_sql", END)
@@ -69,8 +74,8 @@ graph_builder.add_edge("execute_sql", END)
 graph = graph_builder.compile()
 
 
+if __name__ == "__main__":
 
-if __name__ == '__main__':
     async def test():
         embedding_client_manager.init()
         qdrant_client_manager.init()
@@ -78,12 +83,19 @@ if __name__ == '__main__':
         meta_mysql_client_manager.init()
         dw_mysql_client_manager.init()
 
-        async with meta_mysql_client_manager.get_session_factory()() as meta_session, dw_mysql_client_manager.get_session_factory()() as dw_session:
+        async with (
+            meta_mysql_client_manager.get_session_factory()() as meta_session,
+            dw_mysql_client_manager.get_session_factory()() as dw_session,
+        ):
             meta_mysql_repository = MetaMySQLRepository(meta_session)
             dw_mysql_repository = DWMySQLRepository(dw_session)
-            column_qdrant_repository = ColumnQdrantRepository(qdrant_client_manager.get_client())
+            column_qdrant_repository = ColumnQdrantRepository(
+                qdrant_client_manager.get_client()
+            )
             value_es_repository = ValueESRepository(es_client_manager.get_client())
-            metric_qdrant_repository = MetricQdrantRepository(qdrant_client_manager.get_client())
+            metric_qdrant_repository = MetricQdrantRepository(
+                qdrant_client_manager.get_client()
+            )
 
             context = DataAgentContext(
                 embedding_client=embedding_client_manager.get_client(),
@@ -91,10 +103,12 @@ if __name__ == '__main__':
                 value_es_repository=value_es_repository,
                 metric_qdrant_repository=metric_qdrant_repository,
                 meta_mysql_repository=meta_mysql_repository,
-                dw_mysql_repository=dw_mysql_repository
+                dw_mysql_repository=dw_mysql_repository,
             )
             state = cast(DataAgentState, {"query": "统计去年各地区的销售总额"})
-            async for chunk in graph.astream(input=state, context=context, stream_mode="custom"):
+            async for chunk in graph.astream(
+                input=state, context=context, stream_mode="custom"
+            ):
                 print(chunk)
 
         await qdrant_client_manager.close()
@@ -102,6 +116,5 @@ if __name__ == '__main__':
         await embedding_client_manager.close()
         await meta_mysql_client_manager.close()
         await dw_mysql_client_manager.close()
-
 
     asyncio.run(test())
