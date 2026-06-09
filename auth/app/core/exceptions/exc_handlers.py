@@ -34,7 +34,9 @@ def problem_error_handler(request: Request, exc: ProblemError) -> JSONResponse:
     return _build_response(request, exc)
 
 
-def validation_error_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+def validation_error_handler(
+    request: Request, exc: RequestValidationError
+) -> JSONResponse:
     """处理 Pydantic 参数校验错误"""
     errors = [e["msg"] for e in exc.errors()]
     detail = errors[0] if len(errors) == 1 else str(errors)

@@ -40,7 +40,9 @@ class EmailCodeRepo(EmailCodeRepository):
             },
         )
 
-    async def consume(self, db: AsyncSession, email: str, code_type: str, code: str) -> bool:
+    async def consume(
+        self, db: AsyncSession, email: str, code_type: str, code: str
+    ) -> bool:
         """消费验证码（标记为已使用），返回是否消费成功"""
         result = await db.execute(
             text(

@@ -2,7 +2,13 @@
 
 CATEGORY_NAMING_RULES = {
     "手机通讯": {
-        "subtitle_words": ["官方标配", "5G高速体验", "续航升级", "旗舰性能", "轻薄机身"],
+        "subtitle_words": [
+            "官方标配",
+            "5G高速体验",
+            "续航升级",
+            "旗舰性能",
+            "轻薄机身",
+        ],
         "attribute_keys": ["颜色", "存储", "版本"],
         "attribute_values": {
             "颜色": ["黑色", "白色", "蓝色", "紫色", "金色"],
@@ -32,7 +38,13 @@ CATEGORY_NAMING_RULES = {
         "price_range": [199, 15999],
     },
     "电脑办公": {
-        "subtitle_words": ["高性能办公", "创作设计", "轻薄便携", "电竞体验", "商务稳定"],
+        "subtitle_words": [
+            "高性能办公",
+            "创作设计",
+            "轻薄便携",
+            "电竞体验",
+            "商务稳定",
+        ],
         "attribute_keys": ["颜色", "内存", "硬盘"],
         "attribute_values": {
             "颜色": ["银色", "深空灰", "黑色", "月光白"],
@@ -69,7 +81,13 @@ CATEGORY_NAMING_RULES = {
         "price_range": [49, 3999],
     },
     "食品饮料": {
-        "subtitle_words": ["人气热卖", "家庭囤货", "办公室零食", "健康轻负担", "节日礼盒"],
+        "subtitle_words": [
+            "人气热卖",
+            "家庭囤货",
+            "办公室零食",
+            "健康轻负担",
+            "节日礼盒",
+        ],
         "attribute_keys": ["口味", "规格"],
         "attribute_values": {
             "口味": ["原味", "海盐味", "蜂蜜味", "混合口味", "奶香味"],
@@ -114,4 +132,3 @@ CATEGORY_NAMING_RULES = {
         "price_range": [29, 2999],
     },
 }
-

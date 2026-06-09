@@ -74,7 +74,9 @@ class AuthorizeUseCase:
         if not code_challenge or not self._pkce.validate_base64url_43(code_challenge):
             raise InvalidAuthorizationRequestError(detail="code_challenge 不合法")
         if code_challenge_method != "S256":
-            raise InvalidAuthorizationRequestError(detail="code_challenge_method 必须为 S256")
+            raise InvalidAuthorizationRequestError(
+                detail="code_challenge_method 必须为 S256"
+            )
 
         expire = _session_expire_seconds(self._cfg)
         async with self._db() as db:
@@ -243,7 +245,9 @@ def create_oauth_use_cases(
         authorize=AuthorizeUseCase(
             db_factory, auth_config, auth_code_repo, session_repo, token_factory, pkce
         ),
-        exchange_token=ExchangeTokenUseCase(db_factory, auth_code_repo, token_issuer, pkce),
+        exchange_token=ExchangeTokenUseCase(
+            db_factory, auth_code_repo, token_issuer, pkce
+        ),
         login=LoginUseCase(db_factory, user_repo, password_hasher, session_creator),
         logout=LogoutUseCase(db_factory, session_repo, token_repo),
     )

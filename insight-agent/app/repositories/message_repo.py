@@ -52,7 +52,11 @@ async def update_yn_by_conversation_id(
         conversation_id: 对话 ID
         yn: 启用状态（1-启用，0-禁用）
     """
-    stmt = sql_update(Message).where(Message.conversation_id == conversation_id).values(yn=yn)
+    stmt = (
+        sql_update(Message)
+        .where(Message.conversation_id == conversation_id)
+        .values(yn=yn)
+    )
     await db_session.execute(stmt)
     await db_session.commit()
 

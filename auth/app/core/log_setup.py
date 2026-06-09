@@ -39,7 +39,9 @@ def _build_log_json(record):
     if exc_info:
         if exc_info.value is not None:
             log_json["exception"] = "".join(
-                traceback.format_exception(exc_info.type, exc_info.value, exc_info.traceback)
+                traceback.format_exception(
+                    exc_info.type, exc_info.value, exc_info.traceback
+                )
             )
         # 清除 exception，阻止 loguru 默认格式化
         record["exception"] = None

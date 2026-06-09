@@ -80,7 +80,9 @@ class RoleRepo(RoleRepository):
     async def get_by_id(self, db: AsyncSession, role_id: int) -> Role | None:
         """根据 ID 获取角色"""
         result = await db.execute(
-            text("SELECT id, name, yn, created_at, updated_at FROM `role` WHERE id = :role_id"),
+            text(
+                "SELECT id, name, yn, created_at, updated_at FROM `role` WHERE id = :role_id"
+            ),
             {"role_id": role_id},
         )
         row = result.mappings().first()
@@ -89,13 +91,17 @@ class RoleRepo(RoleRepository):
     async def get_by_name(self, db: AsyncSession, name: str) -> Role | None:
         """根据名称获取角色"""
         result = await db.execute(
-            text("SELECT id, name, yn, created_at, updated_at FROM `role` WHERE name = :name"),
+            text(
+                "SELECT id, name, yn, created_at, updated_at FROM `role` WHERE name = :name"
+            ),
             {"name": name},
         )
         row = result.mappings().first()
         return _role_from_row(row) if row else None
 
-    async def get_by_id_with_user(self, db: AsyncSession, role_id: int) -> RoleWithUsers | None:
+    async def get_by_id_with_user(
+        self, db: AsyncSession, role_id: int
+    ) -> RoleWithUsers | None:
         """根据 ID 获取角色及用户"""
         role = await self.get_by_id(db, role_id)
         if role is None:
@@ -179,7 +185,9 @@ class RoleRepo(RoleRepository):
         )
         return [_user_from_row(row) for row in result.mappings().all()]
 
-    async def _get_permissions(self, db: AsyncSession, role_id: int) -> list[Permission]:
+    async def _get_permissions(
+        self, db: AsyncSession, role_id: int
+    ) -> list[Permission]:
         """获取角色关联的权限"""
         result = await db.execute(
             text(

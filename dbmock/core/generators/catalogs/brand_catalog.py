@@ -133,7 +133,13 @@ BRAND_PRODUCT_CATALOG = {
     },
     "阿迪达斯": {
         "allowed_categories": ["运动户外", "鞋靴箱包", "服饰内衣"],
-        "series_words": ["UltraBoost", "Superstar", "Climacool", "Adizero", "Originals"],
+        "series_words": [
+            "UltraBoost",
+            "Superstar",
+            "Climacool",
+            "Adizero",
+            "Originals",
+        ],
         "product_words": ["跑步鞋", "板鞋", "运动裤", "卫衣", "运动背包"],
     },
     "安踏": {
@@ -322,4 +328,3 @@ BRAND_PRODUCT_CATALOG = {
         "product_words": ["休闲鞋", "跑步鞋", "老爹鞋", "运动短袖"],
     },
 }
-

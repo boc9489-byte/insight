@@ -31,7 +31,9 @@ def entity_to_schema(message: Message) -> chat_schema.MessageSchema:
     # 将 json 字符串转换为附件对象
     attachments = None
     if message.attachments:
-        attachments = [chat_schema.Attachment(**item) for item in json.loads(message.attachments)]
+        attachments = [
+            chat_schema.Attachment(**item) for item in json.loads(message.attachments)
+        ]
 
     return chat_schema.MessageSchema(
         message_id=message.id,
@@ -44,14 +46,18 @@ def entity_to_schema(message: Message) -> chat_schema.MessageSchema:
     )
 
 
-def schema_to_entity(message: chat_schema.MessageSchema, conversation_id: int) -> Message:
+def schema_to_entity(
+    message: chat_schema.MessageSchema, conversation_id: int
+) -> Message:
     """将 MessageSchema 转换为消息实体"""
     # 检查是否有上下文顺序号
     if message.context_seq is None:
         raise ValueError("Message context_seq is required")
 
     # 将消息片段对象转换为 json 字符串
-    parts = json.dumps([part.model_dump() for part in message.parts], ensure_ascii=False)
+    parts = json.dumps(
+        [part.model_dump() for part in message.parts], ensure_ascii=False
+    )
 
     # 将附件对象转换为 json 字符串
     attachments = None
@@ -94,7 +100,9 @@ def langchain_message_to_schema(
         content = message.content
         # 如果消息内容是字符串，转换为文本消息片段
         if isinstance(content, str):
-            parts: list[chat_schema.MessagePart] = [chat_schema.TextContent(text=content)]
+            parts: list[chat_schema.MessagePart] = [
+                chat_schema.TextContent(text=content)
+            ]
         # 如果消息内容是列表，转换为文本消息片段列表
         elif isinstance(content, list):
             parts = [
@@ -200,11 +208,15 @@ def _build_image_data_url(
     return f"data:{mime_type};base64,{encoded}"
 
 
-def _append_prompt(content_parts: list[dict[str, Any]], header: str, lines: list[str]) -> None:
+def _append_prompt(
+    content_parts: list[dict[str, Any]], header: str, lines: list[str]
+) -> None:
     """向 content_parts 追加提示文本，与已有内容间用换行符分隔"""
     prefix = "\n\n" if content_parts else ""
     content_parts.append(
-        chat_schema.TextContent(text=prefix + header + "\n" + "\n".join(lines)).model_dump()
+        chat_schema.TextContent(
+            text=prefix + header + "\n" + "\n".join(lines)
+        ).model_dump()
     )
 
 
@@ -240,7 +252,9 @@ def _process_attachments(
         # 需要从工作区读取图片，获取工作区目录依赖 user_id 和 conversation_id
         # 如果缺少 user_id 或 conversation_id，则报错
         if user_id is None or conversation_id is None:
-            raise ValueError("user_id and conversation_id are required for image attachments")
+            raise ValueError(
+                "user_id and conversation_id are required for image attachments"
+            )
         lost: list[str] = []
         for a in images:
             try:
@@ -303,7 +317,9 @@ def schema_to_langchain_message(
 
     # 处理用户带附件的消息
     if message.attachments and message.role == "user":
-        _process_attachments(content_parts, message.attachments, user_id, conversation_id)
+        _process_attachments(
+            content_parts, message.attachments, user_id, conversation_id
+        )
 
     payload: dict[str, Any] = {"role": message.role, "content": content_parts}
     if tool_calls:

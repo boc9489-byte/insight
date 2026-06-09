@@ -230,10 +230,7 @@ def _load_current_dim_rows(conn, table) -> list[dict[str, Any]]:
 def _existing_dim_keys(conn, table, key_field: str) -> set[tuple[Any, date]]:
     """查询维表中已存在的业务键与开始日期组合。"""
     stmt = select(getattr(table.c, key_field), table.c.start_date)
-    return {
-        (getattr(row, key_field), row.start_date)
-        for row in conn.execute(stmt)
-    }
+    return {(getattr(row, key_field), row.start_date) for row in conn.execute(stmt)}
 
 
 def _close_current_dim_rows(
@@ -680,9 +677,12 @@ def run(ctx: RunContext) -> None:
                 )
                 continue
 
-            if any(row["start_date"] >= end_date for row in conn.execute(
-                select(table).where(table.c.is_current == 1)
-            ).mappings()):
+            if any(
+                row["start_date"] >= end_date
+                for row in conn.execute(
+                    select(table).where(table.c.is_current == 1)
+                ).mappings()
+            ):
                 raise ValueError(
                     f"{table_name} 检测到种子变更，但数据库中的当前版本开始日期已不早于本次生成结束日期 {end_date}"
                 )
@@ -699,7 +699,9 @@ def run(ctx: RunContext) -> None:
                 for key in insert_keys
                 if (key, end_date) not in existing_keys
             ]
-            inserted = bulk_insert(conn, table, insert_rows, batch_size=ctx.gen.batch_size)
+            inserted = bulk_insert(
+                conn, table, insert_rows, batch_size=ctx.gen.batch_size
+            )
             logger.info(
                 "batch1 seed scd table={} seed_rows={} changed_rows={} removed_rows={} inserted_rows={} new_version={}",
                 table_name,

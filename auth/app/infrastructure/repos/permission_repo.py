@@ -74,14 +74,18 @@ class PermissionRepo(PermissionRepository):
             {
                 "permission_id": permission.id,
                 "name": permission.name if name is None else name,
-                "description": permission.description if description is None else description,
+                "description": permission.description
+                if description is None
+                else description,
                 "yn": permission.yn if yn is None else yn,
                 "now": now_str(),
             },
         )
         return _permission_from_row(result.mappings().one())
 
-    async def get_by_id(self, db: AsyncSession, permission_id: int) -> Permission | None:
+    async def get_by_id(
+        self, db: AsyncSession, permission_id: int
+    ) -> Permission | None:
         """根据 ID 获取权限"""
         result = await db.execute(
             text(
@@ -188,7 +192,9 @@ class PermissionRepo(PermissionRepository):
         )
         return [_role_from_row(row) for row in result.mappings().all()]
 
-    async def _get_role_users(self, db: AsyncSession, role_id: int | None) -> list[User]:
+    async def _get_role_users(
+        self, db: AsyncSession, role_id: int | None
+    ) -> list[User]:
         """获取角色关联的用户"""
         if role_id is None:
             return []

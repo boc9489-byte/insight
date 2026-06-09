@@ -114,7 +114,10 @@ def _allocate_daily_counts(
         event_date = start_date + timedelta(days=rng.randrange(total_days + 1))
         counts[event_date] += 1
     return [
-        (start_date + timedelta(days=offset), counts.get(start_date + timedelta(days=offset), 0))
+        (
+            start_date + timedelta(days=offset),
+            counts.get(start_date + timedelta(days=offset), 0),
+        )
         for offset in range(total_days + 1)
     ]
 
@@ -220,8 +223,7 @@ def run(ctx: RunContext) -> None:
             return
         if any(table_has_rows.values()):
             raise ValueError(
-                "批次5行为事实表存在部分已生成状态，请先清理后重跑: "
-                f"{table_has_rows}"
+                f"批次5行为事实表存在部分已生成状态，请先清理后重跑: {table_has_rows}"
             )
 
         logger.info("batch5 loading source rows")
@@ -282,11 +284,15 @@ def run(ctx: RunContext) -> None:
         ]
         keyword_pool = SEARCH_KEYWORDS + category_name_pool[:50]
         keyword_count = len(keyword_pool)
-        cart_daily_counts = _allocate_daily_counts(cart_target, start_date, end_date, rng)
+        cart_daily_counts = _allocate_daily_counts(
+            cart_target, start_date, end_date, rng
+        )
         favor_daily_counts = _allocate_daily_counts(
             favor_target, start_date, end_date, rng
         )
-        page_daily_counts = _allocate_daily_counts(page_target, start_date, end_date, rng)
+        page_daily_counts = _allocate_daily_counts(
+            page_target, start_date, end_date, rng
+        )
         search_daily_counts = _allocate_daily_counts(
             search_target, start_date, end_date, rng
         )
@@ -444,7 +450,9 @@ def run(ctx: RunContext) -> None:
                         "user_id": user_id,
                         "shop_id": sku_row.get("shop_id"),
                         "sku_id": sku_row["sku_id"] if favor_type == "商品" else None,
-                        "spu_id": sku_row.get("spu_id") if favor_type == "商品" else None,
+                        "spu_id": sku_row.get("spu_id")
+                        if favor_type == "商品"
+                        else None,
                         "favor_type": favor_type,
                         "client_type": client_type,
                         "channel_code": channel_code,
@@ -547,10 +555,18 @@ def run(ctx: RunContext) -> None:
                         "search_source": SEARCH_SOURCES[
                             search_idx % search_source_count
                         ],
-                        "result_total_cnt": 0 if is_no_result else 20 + (search_idx % 180),
-                        "click_rank": None if click_row is None else 1 + (search_idx % 20),
-                        "click_sku_id": None if click_row is None else click_row["sku_id"],
-                        "click_spu_id": None if click_row is None else click_row["spu_id"],
+                        "result_total_cnt": 0
+                        if is_no_result
+                        else 20 + (search_idx % 180),
+                        "click_rank": None
+                        if click_row is None
+                        else 1 + (search_idx % 20),
+                        "click_sku_id": None
+                        if click_row is None
+                        else click_row["sku_id"],
+                        "click_spu_id": None
+                        if click_row is None
+                        else click_row["spu_id"],
                         "is_no_result": is_no_result,
                         "is_search_success": 1,
                         "channel_code": channel_code,

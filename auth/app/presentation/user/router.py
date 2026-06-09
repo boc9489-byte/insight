@@ -72,7 +72,9 @@ def create_router(
     @router.post("/update_password")
     async def update_password(body: UpdatePasswordRequest) -> None:
         """重置密码（需验证码）"""
-        await user_use_cases.reset_password.execute(body.email, body.code, body.password)
+        await user_use_cases.reset_password.execute(
+            body.email, body.code, body.password
+        )
 
     @router.get("/userinfo")
     async def userinfo(
@@ -80,6 +82,8 @@ def create_router(
     ) -> UserResponse:
         """获取当前用户信息（需认证）"""
         result = await user_use_cases.get_current_user_info.execute(payload.sub)
-        return UserResponse(username=result.username, email=result.email, roles=result.roles)
+        return UserResponse(
+            username=result.username, email=result.email, roles=result.roles
+        )
 
     return router

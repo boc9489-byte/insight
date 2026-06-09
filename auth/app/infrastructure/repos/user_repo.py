@@ -36,7 +36,9 @@ class UserRepo(UserRepository):
     def __init__(self, password_hasher: PasswordHasher) -> None:
         self._hasher = password_hasher
 
-    async def create(self, db: AsyncSession, email: str, username: str, password: str) -> User:
+    async def create(
+        self, db: AsyncSession, email: str, username: str, password: str
+    ) -> User:
         """创建用户"""
         now = now_str()
         result = await db.execute(
@@ -56,7 +58,9 @@ class UserRepo(UserRepository):
 
     async def remove(self, db: AsyncSession, user_id: int) -> None:
         """删除用户"""
-        await db.execute(text("DELETE FROM `user` WHERE id = :user_id"), {"user_id": user_id})
+        await db.execute(
+            text("DELETE FROM `user` WHERE id = :user_id"), {"user_id": user_id}
+        )
 
     async def update(
         self,
@@ -71,7 +75,9 @@ class UserRepo(UserRepository):
         """更新用户信息"""
         new_email = user.email if email is None else email
         new_name = user.name if username is None else username
-        new_hash = user.password_hash if password is None else self._hasher.hash(password)
+        new_hash = (
+            user.password_hash if password is None else self._hasher.hash(password)
+        )
         new_yn = user.yn if yn is None else yn
         result = await db.execute(
             text(
@@ -104,7 +110,9 @@ class UserRepo(UserRepository):
         row = result.mappings().first()
         return _user_from_row(row) if row else None
 
-    async def get_by_id_with_role(self, db: AsyncSession, user_id: int) -> UserWithRoles | None:
+    async def get_by_id_with_role(
+        self, db: AsyncSession, user_id: int
+    ) -> UserWithRoles | None:
         """根据 ID 获取用户及角色"""
         user = await self.get_by_id(db, user_id)
         if user is None:
@@ -164,7 +172,9 @@ class UserRepo(UserRepository):
         row = result.mappings().first()
         return _user_from_row(row) if row else None
 
-    async def get_by_email_with_role(self, db: AsyncSession, email: str) -> UserWithRoles | None:
+    async def get_by_email_with_role(
+        self, db: AsyncSession, email: str
+    ) -> UserWithRoles | None:
         """根据邮箱获取用户及角色"""
         user = await self.get_by_email(db, email)
         if user is None:

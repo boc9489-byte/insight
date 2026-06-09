@@ -1,6 +1,7 @@
 """批次3营销活动和优惠券生成规则。"""
 
-from ..settings import COUPON_TARGET_COUNT, PROMOTION_TARGET_COUNT
+from ..settings import COUPON_TARGET_COUNT as COUPON_TARGET_COUNT
+from ..settings import PROMOTION_TARGET_COUNT as PROMOTION_TARGET_COUNT
 
 PROMOTION_TYPES = ["满减", "折扣", "秒杀", "拼团"]
 PROMOTION_SCENES = ["平台", "店铺", "品牌"]

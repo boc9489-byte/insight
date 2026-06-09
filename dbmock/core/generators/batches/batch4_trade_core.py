@@ -641,8 +641,9 @@ def _sample_same_shop_sku(
     """尽量从同店铺中选择未重复的 SKU。"""
     return pool.random_row(
         rng,
-        predicate=lambda row: row["shop_id"] == shop_id
-        and row["sku_id"] not in used_sku_ids,
+        predicate=lambda row: (
+            row["shop_id"] == shop_id and row["sku_id"] not in used_sku_ids
+        ),
         max_attempts=96,
     )
 

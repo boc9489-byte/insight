@@ -73,7 +73,9 @@ class DBInit:
             task_id = progress.add_task("Start", total=len(db_sql_orm))
             semaphore = asyncio.Semaphore(max_workers)  # 信号量控制并发
 
-            async def process_database(db_name: str, sql_file_path: Path, output_path: Path):
+            async def process_database(
+                db_name: str, sql_file_path: Path, output_path: Path
+            ):
                 """处理单个数据库的异步任务"""
                 async with semaphore:
                     try:
@@ -84,7 +86,9 @@ class DBInit:
                         db_url = self.get_sync_db_url(db_name)
                         await self.gen_tb_model(output_path, db_url)
                     finally:
-                        progress.update(task_id, advance=1, description=f"{db_name[:8]:<8}")
+                        progress.update(
+                            task_id, advance=1, description=f"{db_name[:8]:<8}"
+                        )
 
             # 并发执行任务
             await asyncio.gather(

@@ -264,13 +264,25 @@ def create_user_use_cases(
     """工厂函数：创建所有用户用例并注入依赖"""
     return UserUseCases(
         send_email_code=SendEmailCodeUseCase(
-            db_factory, auth_config, user_repo, email_code_repo, token_factory, email_sender
+            db_factory,
+            auth_config,
+            user_repo,
+            email_code_repo,
+            token_factory,
+            email_sender,
         ),
         register_user=RegisterUserUseCase(
-            db_factory, auth_config, user_repo, email_code_repo, session_repo, token_factory
+            db_factory,
+            auth_config,
+            user_repo,
+            email_code_repo,
+            session_repo,
+            token_factory,
         ),
         update_username=UpdateUsernameUseCase(db_factory, user_repo),
-        update_email=UpdateEmailUseCase(db_factory, user_repo, email_code_repo, token_repo),
+        update_email=UpdateEmailUseCase(
+            db_factory, user_repo, email_code_repo, token_repo
+        ),
         reset_password=ResetPasswordUseCase(
             db_factory, user_repo, email_code_repo, session_repo, token_repo
         ),

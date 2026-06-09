@@ -1,6 +1,6 @@
 """批次4订单生成规则。"""
 
-from ..settings import ORDER_DETAIL_TARGET_COUNT
+from ..settings import ORDER_DETAIL_TARGET_COUNT as ORDER_DETAIL_TARGET_COUNT
 
 ORDER_ACTIVITY_RATE = 0.40
 ORDER_COUPON_RATE = 0.40

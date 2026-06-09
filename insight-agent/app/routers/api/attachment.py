@@ -50,7 +50,9 @@ async def api_upload_attachment(
             target_file.write(chunk)
 
     logger.info(f"Upload attachment: {conversation_id=}, file={f_path}")
-    return chat_schema.UploadAttachmentResponse(attachment=chat_schema.Attachment(f_path=f_path))
+    return chat_schema.UploadAttachmentResponse(
+        attachment=chat_schema.Attachment(f_path=f_path)
+    )
 
 
 @router.post("/delete")
@@ -75,7 +77,9 @@ async def api_delete_attachment(
     if target_path.exists() and target_path.is_file():
         target_path.unlink()
 
-    logger.info(f"Delete attachment: conversation_id={body.conversation_id}, file={body.f_path}")
+    logger.info(
+        f"Delete attachment: conversation_id={body.conversation_id}, file={body.f_path}"
+    )
 
 
 @router.get("/get")

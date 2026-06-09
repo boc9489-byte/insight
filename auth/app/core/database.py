@@ -37,7 +37,9 @@ class DatabaseManager:
             )
         return self._engines[db_url]
 
-    def _get_session_maker(self, db_url: str, db_driver: str) -> async_sessionmaker[AsyncSession]:
+    def _get_session_maker(
+        self, db_url: str, db_driver: str
+    ) -> async_sessionmaker[AsyncSession]:
         """获取或创建会话工厂"""
         if db_url not in self._session_makers:
             engine = self._get_engine(db_url, db_driver)

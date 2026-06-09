@@ -14,3 +14,13 @@ name = "dbmock"
 readme = "README.md"
 requires-python = ">=3.12"
 version = "0.1.0"
+
+[dependency-groups]
+dev = [
+  "ruff>=0.15.16",
+  "pyright>=1.1.410",
+]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"

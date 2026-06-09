@@ -79,7 +79,9 @@ class TokenRepo(TokenRepository):
             {"session_id": session_id, "now": now_str()},
         )
 
-    async def update_all_by_user(self, db: AsyncSession, user_id: int, scopes: list[str]) -> None:
+    async def update_all_by_user(
+        self, db: AsyncSession, user_id: int, scopes: list[str]
+    ) -> None:
         """更新用户所有令牌的权限范围"""
         await db.execute(
             text(
@@ -90,7 +92,9 @@ class TokenRepo(TokenRepository):
             {"user_id": user_id, "scope": json.dumps(scopes, ensure_ascii=False)},
         )
 
-    async def get_active(self, db: AsyncSession, access_token: str) -> AccessToken | None:
+    async def get_active(
+        self, db: AsyncSession, access_token: str
+    ) -> AccessToken | None:
         """获取有效的令牌"""
         result = await db.execute(
             text(
