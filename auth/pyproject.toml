@@ -1,0 +1,43 @@
+[project]
+name = "auth"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "aiosqlite>=0.21.0",
+  "aiosmtplib>=5.1.0",
+  "fastapi[standard]>=0.128.0",
+  "loguru>=0.7.3",
+  "omegaconf>=2.3.0",
+  "pwdlib[argon2]>=0.3.0",
+  "sqlalchemy[aiosqlite]>=2.0.46",
+]
+
+[dependency-groups]
+dev = [
+  "ruff>=0.15.10",
+  "pyright>=1.1.408",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+ignore = ["E501"] # line too long handled by formatter
+select = [
+  "I", # isort
+  "N", # pep8-naming
+  "UP", # pyupgrade
+  "B", # flake8-bugbear
+  "SIM", # flake8-simplify
+  "ASYNC", # flake8-async
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+[tool.pyright]
+venv = ".venv"
+venvPath = "."
