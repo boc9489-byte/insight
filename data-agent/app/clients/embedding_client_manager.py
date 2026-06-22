@@ -25,6 +25,10 @@ class RemoteEmbeddingClient:
 
     def __init__(self, config: EmbeddingConfig):
         self.config = config
+        if not config.api_key:
+            raise RuntimeError(
+                "SILICONFLOW_API_KEY is required for data-agent embedding calls"
+            )
         self._client = httpx.AsyncClient(
             base_url=config.base_url.rstrip("/"),
             timeout=config.timeout,

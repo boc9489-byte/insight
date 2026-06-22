@@ -2,6 +2,9 @@ from langchain.chat_models import init_chat_model
 
 from app.conf.app_config import app_config
 
+if not app_config.llm.api_key:
+    raise RuntimeError("OPENROUTER_API_KEY is required for data-agent LLM calls")
+
 llm = init_chat_model(
     model=app_config.llm.model_name,
     model_provider="openai",

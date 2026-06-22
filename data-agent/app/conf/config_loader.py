@@ -17,8 +17,8 @@ def load_dotenv(env_file: Path) -> None:
         key, value = line.split("=", 1)
         key = key.strip()
         value = value.strip().strip('"').strip("'")
-        if key:
-            os.environ.setdefault(key, value)
+        if key and not os.environ.get(key):
+            os.environ[key] = value
 
 
 def load_config[T](config_file: Path, schema_cls: Type[T]) -> T:

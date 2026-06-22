@@ -51,6 +51,9 @@ class MetaKnowledgeService:
                 serialized.append(value)
         return serialized
 
+    def _point_id(self, *parts: str) -> uuid.UUID:
+        return uuid.uuid5(uuid.NAMESPACE_URL, ":".join(parts))
+
     async def _save_tables_to_meta_db(
         self, meta_config: MetaConfig
     ) -> list[ColumnInfo]:
@@ -106,21 +109,25 @@ class MetaKnowledgeService:
         for column_info in column_infos:
             points.append(
                 {
-                    "id": uuid.uuid4(),
+                    "id": self._point_id("column", column_info.id, "name"),
                     "embedding_text": column_info.name,
                     "payload": column_info,
                 }
             )
             points.append(
                 {
-                    "id": uuid.uuid4(),
+                    "id": self._point_id("column", column_info.id, "description"),
                     "embedding_text": column_info.description,
                     "payload": column_info,
                 }
             )
             for alia in column_info.alias:
                 points.append(
-                    {"id": uuid.uuid4(), "embedding_text": alia, "payload": column_info}
+                    {
+                        "id": self._point_id("column", column_info.id, "alias", alia),
+                        "embedding_text": alia,
+                        "payload": column_info,
+                    }
                 )
         # 向量列表
         embedding_texts = [point["embedding_text"] for point in points]
@@ -213,21 +220,25 @@ class MetaKnowledgeService:
         for metric_info in metric_infos:
             points.append(
                 {
-                    "id": uuid.uuid4(),
+                    "id": self._point_id("metric", metric_info.id, "name"),
                     "embedding_text": metric_info.name,
                     "payload": metric_info,
                 }
             )
             points.append(
                 {
-                    "id": uuid.uuid4(),
+                    "id": self._point_id("metric", metric_info.id, "description"),
                     "embedding_text": metric_info.description,
                     "payload": metric_info,
                 }
             )
             for alia in metric_info.alias:
                 points.append(
-                    {"id": uuid.uuid4(), "embedding_text": alia, "payload": metric_info}
+                    {
+                        "id": self._point_id("metric", metric_info.id, "alias", alia),
+                        "embedding_text": alia,
+                        "payload": metric_info,
+                    }
                 )
 
         ids = [point["id"] for point in points]
